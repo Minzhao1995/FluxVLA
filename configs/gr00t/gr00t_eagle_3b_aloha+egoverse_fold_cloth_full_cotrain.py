@@ -32,7 +32,7 @@ model = dict(
         num_steps=32,
         traj_length=10,
         action_dim=32,
-        ori_action_dim=20),
+        ori_action_dim=14),
     freeze_vlm_backbone=False,
     name_mapping={
         'vlm_backbone.vlm': 'backbone.eagle_model',
@@ -59,7 +59,7 @@ inference_model = dict(
         num_steps=32,
         num_inference_timesteps=4,
         traj_length=10,
-        ori_action_dim=20,
+        ori_action_dim=14,
         action_dim=32,
         diffusion_model_cfg=dict(
             attention_head_dim=48,
@@ -74,14 +74,14 @@ inference_model = dict(
             positional_embeddings=None)))
 
 train_dataloader = dict(
-    per_device_batch_size=8,
+    per_device_batch_size=16,
     per_device_num_workers=4,
     dataset=dict(
         type='DistributedRepeatingDataset',
         seed=7,
         name_mappings={
-            'observation.state': ['proprio'],
-            'action': ['action'],
+            'observation.state': ['proprio', 'action'],
+            'action': ['egoverse_action'],
         },
         statistic_keys=['observation.state', 'timestamp', 'action'],
         datasets=dict(
@@ -90,8 +90,9 @@ train_dataloader = dict(
                 type='ParquetDataset',
                 data_root_path=  # noqa: E251
                 [
-                    '/mnt/data/cpfs/users/mayer/egoverse_lerobot/fold_cloth/fold_cloth',  # noqa: E501
+                    '/mnt/data/cpfs/users/mayer/egoverse_lerobot/fold_cloth/fold_cloth_rel/fold_cloth_relative',  # noqa: E501
                 ],
+                action_key='action',
                 transforms=[
                     dict(
                         type='ProcessParquetInputs',
@@ -133,7 +134,7 @@ train_dataloader = dict(
                         state_dim=64,
                         action_dim=32,
                         state_key='proprio',
-                        action_key='action',
+                        action_key='egoverse_action',
                         norm_type='mean_std')
                 ],
                 action_window_size=32)
@@ -196,10 +197,11 @@ train_dataloader = dict(
 
 runner = dict(
     type='FSDPTrainRunner',
-    max_epochs=6,
+    max_epochs=20,
     learning_rate=2e-5,
     weight_decay=0.0,
     max_grad_norm=1.0,
+    max_keep_ckpts=10,
     sampler=None,
     tokenizer=dict(
         type='PretrainedTokenizer',
