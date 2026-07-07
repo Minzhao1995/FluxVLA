@@ -144,8 +144,9 @@ train_dataloader = dict(
                 type='ParquetDataset',
                 data_root_path=  # noqa: E251
                 [
-                    '/mnt/data/cpfs/users/mayer/RealRobot_AgileX_aloha_lerobot_v2/20260613_20260613_01_4090_e2e_02', 
+                    #'/mnt/data/cpfs/users/mayer/RealRobot_AgileX_aloha_lerobot_v2/20260613_20260613_01_4090_e2e_02', 
                     '/mnt/data/cpfs/users/mayer/RealRobot_AgileX_aloha_lerobot_v2/20260615_20260615_01_4090_e2e_02', # noqa: E501
+                    '/mnt/data/cpfs/users/mayer/RealRobot_AgileX_aloha_lerobot_v2/20260615_20260615_01_4090_e2e_02',
                 ],
                 transforms=[
                     dict(
@@ -197,7 +198,7 @@ train_dataloader = dict(
 
 runner = dict(
     type='FSDPTrainRunner',
-    max_epochs=20,
+    max_epochs=40,
     learning_rate=2e-5,
     weight_decay=0.0,
     max_grad_norm=1.0,
