@@ -14,6 +14,7 @@
 
 from transformers import (PaliGemmaConfig, PaliGemmaForConditionalGeneration,
                           Qwen2_5_VLConfig, Qwen2_5_VLForConditionalGeneration,
+                          Qwen3_5Config, Qwen3_5ForConditionalGeneration,
                           Qwen3VLConfig, Qwen3VLForConditionalGeneration)
 
 VLM_BACKBONE_CONFIGS = dict(
@@ -52,5 +53,20 @@ VLM_BACKBONE_CONFIGS.update({
         model_id='qwen3-vl-8b_pt',
         config=Qwen3VLConfig,
         model_cls=Qwen3VLForConditionalGeneration,
+    ),
+})
+
+VLM_BACKBONE_CONFIGS.update({
+    'qwen3_5_0.8b_pt':
+    dict(
+        model_id='qwen3_5-0.8b_pt',
+        config=Qwen3_5Config,
+        model_cls=Qwen3_5ForConditionalGeneration,
+    ),
+    'qwen3_5_2b_pt':
+    dict(
+        model_id='qwen3_5-2b_pt',
+        config=Qwen3_5Config,
+        model_cls=Qwen3_5ForConditionalGeneration,
     ),
 })
